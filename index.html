@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة خدمات الطلبة - البصرة</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --accent: #06b6d4;
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --success: #10b981;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #e0e7ff 0%, #f3f4f6 100%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            width: 100%;
+            max-width: 550px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 26px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+        .header p {
+            font-size: 15px;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 30px;
+        }
+        .step {
+            display: none;
+        }
+        .step.active {
+            display: block;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-main);
+            font-size: 15px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+            background: #f9fafb;
+        }
+        input:focus, textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            background: #fff;
+        }
+        textarea {
+            resize: vertical;
+            height: 120px;
+        }
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .btn:hover {
+            background: var(--primary-hover);
+        }
+        .success-box {
+            text-align: center;
+            padding: 20px;
+        }
+        .success-icon {
+            font-size: 50px;
+            color: var(--success);
+            margin-bottom: 15px;
+        }
+        .success-box h2 {
+            color: var(--success);
+            margin-bottom: 10px;
+        }
+        .badge {
+            display: inline-block;
+            background: #e0e7ff;
+            color: var(--primary);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>منصة إنجاز البحوث الأكاديمية</h1>
+        <p>خدمات طلابية متكاملة وسريعة في البصرة</p>
+    </div>
+    
+    <div class="content">
+        <div id="step1" class="step active">
+            <div style="text-align: center;"><span class="badge">الخطوة 1 من 2</span></div>
+            <div class="form-group" style="margin-top: 15px;">
+                <label for="studentEmail">البريد الإلكتروني الجامعي أو الشخصي:</label>
+                <input type="email" id="studentEmail" placeholder="example@gmail.com" required>
+            </div>
+            <button class="btn" onclick="goToStep2()">التالي</button>
+        </div>
+
+        <div id="step2" class="step">
+            <div style="text-align: center;"><span class="badge">الخطوة 2 من 2</span></div>
+            <div class="form-group" style="margin-top: 15px;">
+                <label for="studentPhone">رقم الهاتف (للتواصل عبر الواتساب):</label>
+                <input type="tel" id="studentPhone" placeholder="0770xxxxxxx" required>
+            </div>
+            <div class="form-group">
+                <label for="researchTopic">تفاصيل البحث أو التقرير المطلوب:</label>
+                <textarea id="researchTopic" placeholder="اكتب عنوان البحث المطلوب بدقة، الاختصاص، وعدد الصفحات..." required></textarea>
+            </div>
+            <button class="btn" onclick="submitRequest()">إرسال الطلب الآن</button>
+        </div>
+
+        <div id="step3" class="step">
+            <div class="success-box">
+                <div class="success-icon">✓</div>
+                <h2>تم إرسال طلبك بنجاح!</h2>
+                <p>تم إشعار الإدارة برقمك وتفاصيل بحثك. سيتم التواصل معك فوراً لتأكيد التفاصيل وتسليم البحث كاملاً.</p>
+                <button class="btn" onclick="resetForm()">تقديم طلب جديد</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let studentData = { email: '', phone: '', topic: '' };
+function goToStep2() {
+    const emailInput = document.getElementById('studentEmail').value.trim();
+    if(!emailInput || !emailInput.includes('@')) { alert('يرجى إدخال بريد إلكتروني صحيح'); return; }
+    studentData.email = emailInput;
+    document.getElementById('step1').classList.remove('active');
+    document.getElementById('step2').classList.add('active');
+}
+function submitRequest() {
+    const phoneInput = document.getElementById('studentPhone').value.trim();
+    const topicInput = document.getElementById('researchTopic').value.trim();
+    if(!phoneInput || !topicInput) { alert('يرجى إكمال الحقول المطلوبة'); return; }
+    studentData.phone = phoneInput;
+    studentData.topic = topicInput;
+    const targetWhatsApp = '9647703433901';
+    const message = `طلب بحث جديد:%0A- الإيميل: ${studentData.email}%0A- الهاتف: ${studentData.phone}%0A- التفاصيل: ${studentData.topic}`;
+    document.getElementById('step2').classList.remove('active');
+    document.getElementById('step3').classList.add('active');
+    window.open(`https://wa.me/${targetWhatsApp}?text=${message}`, '_blank');
+}
+function resetForm() {
+    document.getElementById('studentEmail').value = '';
+    document.getElementById('studentPhone').value = '';
+    document.getElementById('researchTopic').value = '';
+    document.getElementById('step3').classList.remove('active');
+    document.getElementById('step1').classList.add('active');
+}
+</script>
+</body>
+</html>
